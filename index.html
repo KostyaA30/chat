@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang = "ru">
+<head>
+	<meta charset = "UTF-8">
+	<title>Чат программа</title>
+	<style>
+		body {
+			background: #fcfcfc;
+		}
+	</style>
+</head>
+<body>
+    <div>
+        <h3>Форма сообщений</h3>
+        <form id = "logForm" style = "z-index: 1;">
+            <label for = "name">Имя</label>
+            <input type = "text" id = "name" placeholder = "Введите имя">
+            <input type = "submit" value = "Логин">
+        </form>
+        <div id = "log"></div>
+        <form id = "messForm" style = "display: none; z-index: 2;">
+            <label for = "message">Сообщение</label>
+            <textarea name = "message" id = "message" placeholder = "Введите сообщение"></textarea>
+            <br><input type = "submit" value = "Отправить">
+        </form>
+    </div>
+    <div>
+        <h3>Сообщения</h3>
+        <div id = "all_mess"></div>
+    </div>
+	<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src = "/socket.io/socket.io.js"></script>
+	<script>
+		let min  =  1;
+		let max  =  6;
+		let random  =  Math.floor(Math.random() * (max - min)) + min;
+
+		let alertClass;
+		switch (random) {
+			case 1:
+				alertClass  =  'secondary';
+				break;
+			case 2:
+				alertClass  =  'danger';
+				break;
+			case 3:
+				alertClass  =  'success';
+				break;
+			case 4:
+				alertClass  =  'warning';
+				break;
+			case 5:
+				alertClass  =  'info';
+				break;
+			case 6:
+				alertClass  =  'light';
+				break;
+		}
+
+		$(function() {
+			let socket  =  io.connect();
+			let $logForm  =  $("#logForm");
+			let $mesForm  =  $("#messForm");
+			let $name  =  $("#name");
+			let $textarea  =  $("#message");
+			let $all_messages  =  $("#all_mess");
+            let $log = $("#log");
+
+            $logForm.submit(function(event) {
+				event.preventDefault();
+				socket.emit('send name', {name: $name.val(), className: alertClass});
+				$textarea.val('');
+			});
+			$mesForm.submit(function(event) {
+				event.preventDefault();
+				socket.emit('send mess', {mess: $textarea.val(), name: $name.val(), className: alertClass});
+				$textarea.val('');
+			});
+
+			socket.on('add name', function(data) {
+				$all_messages.append("<div class = 'alert alert-" + data.className + "'><b>" + data.name + "</b> connected</div>");
+                $log.append(`<p>You logged as ${data.name}.</p>`);
+                document.getElementById('log').innerHTML = `You logged as ${data.name}`;
+                document.getElementById("logForm").style.display = "none";
+                document.getElementById("messForm").style.display = "block";
+			});
+            socket.on('add mess', function(data) {
+				$all_messages.append("<div class = 'alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
+			});
+
+		});
+	</script>
+    <script src = "index.js"></script>
+</body>
+</html>
