@@ -1,17 +1,23 @@
-let express  =  require('express');
-let app  =  express();
-let server  =  require('http').createServer(app);
-let sock  =  require('socket.io');
+let express = require('express');
+let http = require('http');
+let sock = require('socket.io');
 
-let io  =  sock(server);
-
-server.listen(3000);
-
+let app = express();
 app.get('/', function(request, respons) {
 	respons.sendFile(__dirname + '/index.html');
 });
 
-connections  =  [];
+let server = http.createServer(app);
+const port = 3000;
+// const host = "192.168.30.91"
+// server.listen(post, host, () => {
+// 	console.log(`Listening to http://${host}:${port}`);
+// });
+server.listen(port);
+
+connections = [];
+
+let io = sock(server);
 
 io.on('connection', function(socket) {
 	console.log("Успешное соединение");

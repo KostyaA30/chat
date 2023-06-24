@@ -31,39 +31,39 @@
 	<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src = "/socket.io/socket.io.js"></script>
 	<script>
-		let min  =  1;
-		let max  =  6;
-		let random  =  Math.floor(Math.random() * (max - min)) + min;
+		let min = 1;
+		let max = 6;
+		let random = Math.floor(Math.random() * (max - min)) + min;
 
 		let alertClass;
 		switch (random) {
 			case 1:
-				alertClass  =  'secondary';
+				alertClass = 'secondary';
 				break;
 			case 2:
-				alertClass  =  'danger';
+				alertClass = 'danger';
 				break;
 			case 3:
-				alertClass  =  'success';
+				alertClass = 'success';
 				break;
 			case 4:
-				alertClass  =  'warning';
+				alertClass = 'warning';
 				break;
 			case 5:
-				alertClass  =  'info';
+				alertClass = 'info';
 				break;
 			case 6:
-				alertClass  =  'light';
+				alertClass = 'light';
 				break;
 		}
 
 		$(function() {
-			let socket  =  io.connect();
-			let $logForm  =  $("#logForm");
-			let $mesForm  =  $("#messForm");
-			let $name  =  $("#name");
-			let $textarea  =  $("#message");
-			let $all_messages  =  $("#all_mess");
+			let socket = io.connect();
+			let $logForm = $("#logForm");
+			let $mesForm = $("#messForm");
+			let $name = $("#name");
+			let $textarea = $("#message");
+			let $all_messages = $("#all_mess");
             let $log = $("#log");
 
             $logForm.submit(function(event) {
